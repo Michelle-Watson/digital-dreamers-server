@@ -1,6 +1,7 @@
 import express from "express";
 const router = express.Router();
 import multer from "multer";
+import fs from "fs";
 
 // Set up multer for image uploads
 const upload = multer({ dest: "uploads/" }); // This will save the uploaded files in the "uploads" directory
@@ -27,6 +28,15 @@ router.post("/", upload.single("image"), async (req, res) => {
 
     // Access uploaded file with req.file, e.g., req.file.path to get the file path
     console.log("Uploaded file:", req.file);
+
+    // Delete uploaded file after processing
+    fs.unlink(req.file.path, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      } else {
+        console.log("File deleted successfully");
+      }
+    });
 
     res.status(200).json({ caption: caption });
   } catch (err) {
