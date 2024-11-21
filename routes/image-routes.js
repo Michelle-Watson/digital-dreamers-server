@@ -1,10 +1,7 @@
 import express from "express";
-const router = express.Router();
-import multer from "multer";
 import fs from "fs";
 
-// Set up multer for image uploads
-const upload = multer({ dest: "uploads/" }); // This will save the uploaded files in the "uploads" directory
+const router = express.Router();
 
 router.get("/", async (_req, res) => {
   try {
@@ -17,7 +14,7 @@ router.get("/", async (_req, res) => {
 });
 
 // POST endpoint to receive image and generate caption
-router.post("/", upload.single("image"), async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).send("No image file uploaded.");
