@@ -5,7 +5,7 @@ import "dotenv/config";
 
 const router = express.Router();
 
-const IMG_HOST_API_KEY = process.env.IMG_HOST_API_KEY;
+const { IMG_HOST_API_KEY, IMG_HOST_URL, CAPTIONER_URL } = process.env;
 
 router.get("/", async (_req, res) => {
   try {
@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
       return res.status(400).send("No image file uploaded.");
     }
 
-    // Access uploaded file with req.file, e.g., req.file.path to get the file path
+    // Access uploaded file with req.file
     console.log("Uploaded file:", req.file);
 
     // Define tone and prompt with default values
@@ -45,17 +45,14 @@ router.post("/", async (req, res) => {
     const imageBuffer = fs.readFileSync(req.file.path);
     const base64Image = imageBuffer.toString("base64");
 
-    // Prepare the imgbb upload request
+    // Prepare imgbb upload request
     const formData = new FormData();
     formData.append("image", base64Image);
     formData.append("key", IMG_HOST_API_KEY);
     formData.append("expiration", expiration);
 
-    // Upload the image to imgbb
-    const imgbbResponse = await axios.post(
-      "https://api.imgbb.com/1/upload",
-      formData
-    );
+    // Upload image to imgbb
+    const imgbbResponse = await axios.post(IMG_HOST_URL, formData);
 
     // Get the image URL from the imgbb response
     const imageUrl = imgbbResponse.data.data.url;
@@ -69,11 +66,7 @@ router.post("/", async (req, res) => {
     };
 
     // Send POST request to external API
-    const response = await axios.post(
-      "https://pallyy.com/api/tools/image-to-caption/get",
-      requestData,
-      {}
-    );
+    const response = await axios.post(CAPTIONER_URL, requestData, {});
 
     // Delete uploaded file after processing
     fs.unlink(req.file.path, (err) => {
