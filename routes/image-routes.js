@@ -1,8 +1,11 @@
 import express from "express";
 import fs from "fs";
 import axios from "axios";
+import "dotenv/config";
 
 const router = express.Router();
+
+const API_KEY = process.env.API_KEY;
 
 router.get("/", async (_req, res) => {
   try {
@@ -37,10 +40,24 @@ router.post("/", async (req, res) => {
       prompt = req.body.prompt;
     }
 
-    // const imageUrl = `http://localhost:5051/uploads/${req.file.filename}`;
-    // hardcode for now
-    const imageUrl = `https://i.ibb.co/wKV2GLB/bunny.jpg`;
-    // TODO: Upload users photo to free public image hosting website since API requires a public URL?
+    // Read the image file and encode it as base64 for the imgbb API
+    const imageBuffer = fs.readFileSync(req.file.path);
+    const base64Image = imageBuffer.toString("base64");
+
+    // Prepare the imgbb upload request
+    const formData = new FormData();
+    formData.append("image", base64Image);
+    formData.append("key", API_KEY);
+
+    // Upload the image to imgbb
+    const imgbbResponse = await axios.post(
+      "https://api.imgbb.com/1/upload",
+      formData
+    );
+
+    // Get the image URL from the imgbb response
+    const imageUrl = imgbbResponse.data.data.url;
+    // old hardcoded URL for testing: https://i.ibb.co/wKV2GLB/bunny.jpg
 
     // Construct the data for the external API request
     const requestData = {
