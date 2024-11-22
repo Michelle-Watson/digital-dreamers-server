@@ -40,6 +40,7 @@ router.post("/", async (req, res) => {
     // const imageUrl = `http://localhost:5051/uploads/${req.file.filename}`;
     // hardcode for now
     const imageUrl = `https://i.ibb.co/wKV2GLB/bunny.jpg`;
+    // TODO: Upload users photo to free public image hosting website since API requires a public URL?
 
     // Construct the data for the external API request
     const requestData = {
