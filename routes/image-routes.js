@@ -5,7 +5,7 @@ import "dotenv/config";
 
 const router = express.Router();
 
-const API_KEY = process.env.API_KEY;
+const IMG_HOST_API_KEY = process.env.IMG_HOST_API_KEY;
 
 router.get("/", async (_req, res) => {
   try {
@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
     // Prepare the imgbb upload request
     const formData = new FormData();
     formData.append("image", base64Image);
-    formData.append("key", API_KEY);
+    formData.append("key", IMG_HOST_API_KEY);
 
     // Upload the image to imgbb
     const imgbbResponse = await axios.post(
