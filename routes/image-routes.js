@@ -30,6 +30,7 @@ router.post("/", async (req, res) => {
     // Define tone and prompt with default values
     let tone = "no-tone";
     let prompt = "";
+    let expiration = 300; // Default expiration set to 300 seconds
 
     // Check if tone and prompt are provided in the request body, and override default values if necessary
     if (req.body.tone) {
@@ -48,6 +49,7 @@ router.post("/", async (req, res) => {
     const formData = new FormData();
     formData.append("image", base64Image);
     formData.append("key", IMG_HOST_API_KEY);
+    formData.append("expiration", expiration);
 
     // Upload the image to imgbb
     const imgbbResponse = await axios.post(
