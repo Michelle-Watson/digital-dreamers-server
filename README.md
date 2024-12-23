@@ -5,8 +5,8 @@
 1. Clone the repository: `git clone <repo-link>`
 
 ```
-`git clone https://github.com/Michelle-Watson/digital-dreamers-server`
-`git clone https://github.com/Michelle-Watson/digital-dreamers`
+git clone https://github.com/Michelle-Watson/digital-dreamers-server
+git clone https://github.com/Michelle-Watson/digital-dreamers
 ```
 
 ### Setup Server
